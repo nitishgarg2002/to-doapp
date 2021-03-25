@@ -3,41 +3,32 @@ import 'package:provider/provider.dart';
 import 'package:task/models/task.dart';
 import 'package:task/pages/widgets/custom_button.dart';
 import 'package:task/providers/tasks.dart';
+
 class TaskPage extends StatefulWidget {
-  
   @override
   _TaskPageState createState() => _TaskPageState();
 }
 
 class _TaskPageState extends State<TaskPage> {
+  bool isComplete = false;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-                    future: Provider.of<Tasks>(context, listen: false)
-                        .fetchAndSetTasks(),
-                    builder: (ctx, snapShot) =>
-                        
-                             Consumer<Tasks>(
-                                child: Center(
-                                  child: const Text('Got no tasks'),
-                                ),
-                                builder: (ctx, tasks, ch) => tasks.items.length <= 0
-                                    ? ch
-                                    : ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: tasks.items.length,
-                                        itemBuilder: (ctx, i) =>
-                                            _taskUncomplete(tasks.items[i])),
-                              ),
-                  );
-                 
-              
-            
-          
-  
-      
-           
-    
+      future: Provider.of<Tasks>(context, listen: false).fetchAndSetTasks(),
+      builder: (ctx, snapShot) => Consumer<Tasks>(
+        child: Center(
+          child: const Text('Got no tasks'),
+        ),
+        builder: (ctx, tasks, ch) => tasks.items.length <= 0
+            ? ch
+            : ListView.builder(
+                shrinkWrap: true,
+                itemCount: tasks.items.length,
+                itemBuilder: (ctx, i) => isComplete
+                    ? _taskComplete(tasks.items[i])
+                    : _taskUncomplete(tasks.items[i])),
+      ),
+    );
   }
 
   Widget _taskUncomplete(Task data) {
@@ -76,7 +67,12 @@ class _TaskPageState extends State<TaskPage> {
                       ),
                       CustomButton(
                         buttonText: 'Complete',
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            isComplete = true;
+                          });
+                          Navigator.pop(context);
+                        },
                         color: Theme.of(context).accentColor,
                         textColor: Colors.white,
                       )
@@ -183,4 +179,3 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 }
-

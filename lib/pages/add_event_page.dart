@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import 'package:task/pages/widgets/custom_date_time_picker.dart';
 import 'package:task/pages/widgets/custom_modal_action_button.dart';
-import 'package:task/pages/widgets/custom_textfield.dart';
 import 'package:task/providers/events.dart';
 
 class AddEventPage extends StatefulWidget {
